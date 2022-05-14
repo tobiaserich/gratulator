@@ -13,9 +13,7 @@ export default {
 };
 
 export const Monthcontainer = (args) => {
-  return <MonthContainer dir={args.dir}></MonthContainer>;
-};
-
-Monthcontainer.args = {
-  dir: "left",
+  return (
+    <MonthContainer dir={{ dir: args.dir, rotation: true }}></MonthContainer>
+  );
 };
