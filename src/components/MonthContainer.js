@@ -3,19 +3,27 @@ import styled from "@emotion/styled";
 
 const Container = styled("div")`
   width: 275px;
-  height: 150px;
+  min-height: 150px;
   background-color: ${({ rotDir }) =>
-    rotDir === "left" ? "#cdb4db" : "#FFAFCC"};
+    rotDir.dir === "left" ? "#cdb4db" : "#FFAFCC"};
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
-  transform: rotate(${({ rotDir }) => (rotDir === "left" ? "-2deg" : "2deg")});
+  font-family: "Arima Madurai";
+  transform: rotate(
+    ${({ rotDir }) =>
+      rotDir.rotation ? (rotDir.dir === "left" ? "-2deg" : "2deg") : "0deg"}
+  );
 `;
 
-const MonthContainer = ({ dir }) => {
+const MonthContainer = ({ handleRef = () => {}, dir, children }) => {
+  const ref = React.useRef("");
+  handleRef(ref);
   console.log(dir);
   return (
     <>
-      <Container rotDir={dir}></Container>
+      <Container ref={ref} rotDir={dir}>
+        {children}
+      </Container>
     </>
   );
 };
