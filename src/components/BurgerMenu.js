@@ -85,21 +85,18 @@ const BurgerContainer = styled("div")`
     }
   }
 `;
-const BurgerMenu = () => {
+const BurgerMenu = ({ menuAnimation }) => {
   const [animationName, setAnimationName] = React.useState("initial");
-
-  const handleClick = () => {
-    const currentStatus = animationName;
-    const newStatus =
-      currentStatus === "initial" || currentStatus === "transformFromX"
-        ? "transformToX"
-        : "transformFromX";
-    setAnimationName(newStatus);
-    console.log(newStatus);
+  const animationTrigger = {
+    fadeOut: "transformFromX",
+    fadeIn: "transformToX",
   };
+  React.useEffect(() => {
+    setAnimationName(animationTrigger[menuAnimation]);
+  }, [menuAnimation]);
 
   return (
-    <BurgerContainer animation={animationName} onClick={handleClick}>
+    <BurgerContainer animation={animationName}>
       <SingleBurgerLine animation={animationName} pos={1} />
       <SingleBurgerLine animation={animationName} pos={2} />
       <SingleBurgerLine animation={animationName} pos={3} />
