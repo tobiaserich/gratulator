@@ -85,6 +85,7 @@ const BurgerContainer = styled("div")`
     }
   }
 `;
+
 const BurgerMenu = ({ menuAnimation }) => {
   const [animationName, setAnimationName] = React.useState("initial");
   const animationTrigger = {
