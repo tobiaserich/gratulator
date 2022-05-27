@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-const Button = styled("div")`
-  width: 150px;
+const ButtonComp = styled("div")`
+  width: ${({ size }) =>
+    size === "big" ? "150px" : size === "small" ? "100px" : ""};
   height: 40px;
   display: flex;
   justify-content: center;
@@ -22,6 +23,7 @@ const Button = styled("div")`
   }
 `;
 
-const BigButton = () => {};
-
+const Button = ({ size, children }) => (
+  <ButtonComp size={size}>{children}</ButtonComp>
+);
 export default Button;
