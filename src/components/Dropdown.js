@@ -42,12 +42,13 @@ const Item = styled("div")`
     isCurrentValue ? "background-color:#A2D2FF;" : ""};
 `;
 
-const Dropdown = ({ children, dropdownItems }) => {
+const Dropdown = ({ dropdownItems }) => {
   const [status, setStatus] = React.useState(false);
   const [currentValue, setCurrentValue] = React.useState(dropdownItems[0]);
   const [focusActive, setFocusActive] = React.useState(false);
 
   React.useEffect(() => {}, [focusActive]);
+
   const handleClick = (item) => {
     setCurrentValue(item);
   };
@@ -95,6 +96,7 @@ const Dropdown = ({ children, dropdownItems }) => {
   return (
     <>
       <DropdownContainer
+        data-testid="dropdown"
         tabIndex={0}
         onFocus={() => handleFocus(true)}
         onBlur={() => {
@@ -109,12 +111,17 @@ const Dropdown = ({ children, dropdownItems }) => {
             return (
               <>
                 <Item
+                  data-testid="firstElement"
                   hoverable={false}
                   onClick={() => handleClick(item)}
                   key={item + index}
                 >
-                  {item < 10 ? "0" : ""}
-                  {item} <Image src={ArrowDown} alt="Arrow down" />
+                  {item < 10 ? `0${item}` : item}
+                  <Image
+                    src={ArrowDown}
+                    key={item + index + "img"}
+                    alt="Arrow down"
+                  />
                 </Item>
               </>
             );
@@ -126,9 +133,7 @@ const Dropdown = ({ children, dropdownItems }) => {
                 hoverable={true}
                 key={item + index}
               >
-                {" "}
-                {item < 10 ? "0" : ""}
-                {item}
+                {item < 10 ? `0${item}` : item}
               </Item>
             );
           }
