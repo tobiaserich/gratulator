@@ -20,17 +20,19 @@ const Button = styled("div")`
   }
 `;
 
-const CalendarDayButton = () => {
+const CalendarDayButton = ({ children, changeDay, currentDay }) => {
   const [active, setActive] = React.useState(false);
+
+  React.useEffect(() => {
+    currentDay ? setActive(true) : setActive(false);
+  }, [currentDay]);
   return (
     <>
       <Button
         active={active}
-        onClick={() => {
-          setActive(!active);
-        }}
+        onClick={() => changeDay({ name: "day", value: children })}
       >
-        2
+        {children}
       </Button>
     </>
   );
