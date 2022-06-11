@@ -12,7 +12,6 @@ test("renders Dropdown component", () => {
 test("change value with click", async () => {
   render(<Dropdown dropdownItems={items} />);
   const dropdownComponent = screen.getByTestId("dropdown");
-  const firstElement = within(dropdownComponent).getByTestId("firstElement");
   const anotherElement = within(dropdownComponent).getByText("0" + items[4]);
   fireEvent.click(anotherElement);
   const updatedElement = within(dropdownComponent).findByTestId("firstElement");
@@ -22,8 +21,6 @@ test("change value with click", async () => {
 test("change value with keypress 'KeyDown'", async () => {
   render(<Dropdown dropdownItems={items} />);
   const dropdownComponent = screen.getByTestId("dropdown");
-  const firstElement = within(dropdownComponent).getByTestId("firstElement");
-  const anotherElement = within(dropdownComponent).getByText("0" + items[4]);
   fireEvent.keyUp(dropdownComponent, {
     key: "ArrowDown",
     code: "ArrowDown",
@@ -36,8 +33,6 @@ test("change value with keypress 'KeyDown'", async () => {
 test("change value with keypress 'KeyUp'", async () => {
   render(<Dropdown dropdownItems={items} />);
   const dropdownComponent = screen.getByTestId("dropdown");
-  const firstElement = within(dropdownComponent).getByTestId("firstElement");
-  const anotherElement = within(dropdownComponent).getByText("0" + items[4]);
   fireEvent.keyUp(dropdownComponent, {
     key: "ArrowUp",
     code: "ArrowUp",

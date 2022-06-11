@@ -8,10 +8,16 @@ const DropdownContainer = styled("div")`
   flex-direction: column;
   overflow: hidden;
   margin: 0 3px;
-  ${({ status }) => (status === false ? "max-height: 20px;" : "")};
+  margin-top: 2px;
+  position: relative;
+  ${({ status }) =>
+    status === false
+      ? "max-height: 20px;"
+      : "overflow: scroll;scrollbar-width:thin;max-height:240px;"};
   border: 1px solid black;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
+  background-color: #d9d9d9;
   > :last-child {
     :after {
       display: inline-block;
@@ -42,12 +48,37 @@ const Item = styled("div")`
     isCurrentValue ? "background-color:#A2D2FF;" : ""};
 `;
 
-const Dropdown = ({ dropdownItems }) => {
+const Dropdown = ({ dropdownItems, changeDate = () => {}, menuFor }) => {
   const [status, setStatus] = React.useState(false);
   const [currentValue, setCurrentValue] = React.useState(dropdownItems[0]);
-  const [focusActive, setFocusActive] = React.useState(false);
 
-  React.useEffect(() => {}, [focusActive]);
+  React.useEffect(() => {
+    changeDate({ name: menuFor, value: currentValue });
+  }, [currentValue]);
+
+  React.useEffect(() => {
+    if (menuFor === "month") {
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      const month = months[new Date().getMonth()];
+      const position = dropdownItems.indexOf(month);
+      setCurrentValue(dropdownItems[position]);
+    } else if (menuFor === "year") {
+      setCurrentValue(new Date().getFullYear());
+    }
+  }, []);
 
   const handleClick = (item) => {
     setCurrentValue(item);
@@ -55,15 +86,6 @@ const Dropdown = ({ dropdownItems }) => {
 
   const isCurrentValue = (item) => {
     return item === currentValue ? true : false;
-  };
-
-  const handleFocus = (focus) => {
-    if (focus === true) {
-      setFocusActive(true);
-    } else {
-      setStatus(false);
-      setFocusActive(false);
-    }
   };
 
   const findCurrentPositionArr = () => {
@@ -98,10 +120,6 @@ const Dropdown = ({ dropdownItems }) => {
       <DropdownContainer
         data-testid="dropdown"
         tabIndex={0}
-        onFocus={() => handleFocus(true)}
-        onBlur={() => {
-          handleFocus(false);
-        }}
         onKeyUp={(event) => handleKey(event)}
         onClick={() => setStatus(!status)}
         status={status}
