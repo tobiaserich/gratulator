@@ -4,6 +4,7 @@ import arrow from "../assets/arrow.svg";
 const ArrowButton = styled("button")`
   width: 26px;
   height: 26px;
+  position: absolute;
   background: #d9d9d9;
   border: 1px solid #000000;
   border-radius: 10px;
@@ -12,9 +13,9 @@ const ArrowButton = styled("button")`
   background-position: center;
   ${({ direction }) => {
     if (direction === "right") {
-      return "transform:rotate(180deg);box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.6);";
+      return "transform:rotate(180deg);box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.6);top:40px;left:165px;";
     } else {
-      return "box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);";
+      return "box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);top:40px;left:-13px;";
     }
   }}
 
