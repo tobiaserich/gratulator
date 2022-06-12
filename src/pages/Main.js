@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
+import MonthlyBirthdayList from "../components/MonthlyBirthdayList";
 import NextBirthday from "../components/NextBirthday";
 import getNextBirthday from "../helper/getNextBirthday";
 import sortBirthdays from "../helper/sortBirthdays";
@@ -68,11 +69,49 @@ const birthdayList = [
 const Main = () => {
   const sortedBirthdayList = sortBirthdays(birthdayList);
   const nextBirthday = getNextBirthday(sortedBirthdayList);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  let birthdaysPerMonth = {};
+  sortedBirthdayList.forEach((singlePerson) => {
+    const monthName = months[new Date(singlePerson.birthday).getMonth()];
+    birthdaysPerMonth[monthName]
+      ? birthdaysPerMonth[monthName].push(singlePerson)
+      : (birthdaysPerMonth[monthName] = new Array(singlePerson));
+  });
+
+  const IterateTroughMonths = () => {
+    const collectMonths = [];
+    let counter = 0;
+
+    for (const key in birthdaysPerMonth) {
+      counter++;
+      collectMonths.push(
+        <MonthlyBirthdayList
+          ppl={birthdaysPerMonth[key]}
+          dir={counter % 2 === 0 ? "right" : "left"}
+          monthName={key}
+        />
+      );
+    }
+    return collectMonths;
+  };
   return (
     <>
       <Header>Gratulator</Header>
-
       <NextBirthday birthdayList={nextBirthday} />
+      {IterateTroughMonths()}
     </>
   );
 };
