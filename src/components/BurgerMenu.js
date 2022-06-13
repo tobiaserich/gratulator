@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 const SingleBurgerLine = styled("div")`
   width: 25px;
   height: 3px;
-  position: relative;
   border-radius: 10px;
   background-color: #a2d2ff;
   animation: ${({ pos, animation }) =>
@@ -62,6 +61,10 @@ const BurgerContainer = styled("div")`
   width: 25px;
   height: 17px;
   display: flex;
+  position: absolute;
+  right: 15px;
+  top: 20px;
+
   flex-direction: column;
   justify-content: space-between;
   animation: ${({ animation }) =>
