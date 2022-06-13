@@ -4,9 +4,16 @@ import MonthlyBirthdayList from "../components/MonthlyBirthdayList";
 import NextBirthday from "../components/NextBirthday";
 import getNextBirthday from "../helper/getNextBirthday";
 import sortBirthdays from "../helper/sortBirthdays";
+import MainMenu from "../components/MainMenu";
 
-const Header = styled("h1")`
+const Header = styled("div")`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  position: relative;
   color: #e6e6e6;
   margin-top: 0;
   margin-bottom: 0;
@@ -109,7 +116,9 @@ const Main = () => {
   };
   return (
     <>
-      <Header>Gratulator</Header>
+      <Header>
+        Gratulator <MainMenu />
+      </Header>
       <NextBirthday birthdayList={nextBirthday} />
       {IterateTroughMonths()}
     </>
