@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
 import imgPlaceholder from "../assets/ImgPlaceholder.svg";
+import calcAge from "../helper/calcAge";
+import ArrowButton from "./ArrowButton.js";
 
 const FlexContainer = styled("div")`
   font-size: 14px;
@@ -11,9 +13,12 @@ const FlexContainer = styled("div")`
   border-radius: 10px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   padding: 10px;
+  margin: auto;
+  margin-top: 0;
   flex-direction: column;
   justify-content: space-between;
   font-family: "Arima Madurai";
+  position: relative;
 `;
 
 const InfoContainer = styled("div")`
@@ -46,17 +51,57 @@ const ImageContainer = styled("img")`
   margin-bottom: -70px;
 `;
 
-const NextBirthday = ({ profileImg }) => {
-  console.log(profileImg);
+const CounterBubble = styled("div")`
+  height: 28px;
+  width: 28px;
+  display: flex;
+  position: absolute;
+  left: 165px;
+  top: -15px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #a2d2ff;
+  padding-top: 1px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+`;
+
+const NextBirthday = ({ birthdayList }) => {
+  const [showPersonNo, setShowPersonNo] = React.useState(0);
+
+  const handleClick = (dir) => {
+    if (dir === "left" && showPersonNo !== 0) {
+      setShowPersonNo(showPersonNo - 1);
+    }
+    if (dir === "right" && showPersonNo < birthdayList.length - 1) {
+      setShowPersonNo(showPersonNo + 1);
+    }
+  };
   return (
     <>
       <FlexContainer>
-        {profileImg ? <ImageContainer src={imgPlaceholder} /> : <></>}
+        {birthdayList.length > 1 ? (
+          <>
+            <CounterBubble>+{birthdayList.length - 1}</CounterBubble>
+            <ArrowButton direction="left" onClick={() => handleClick("left")} />
+            <ArrowButton
+              direction="right"
+              onClick={() => handleClick("right")}
+            />
+          </>
+        ) : (
+          ""
+        )}
+        {birthdayList[0].profileImg ? (
+          <ImageContainer src={imgPlaceholder} />
+        ) : (
+          <></>
+        )}
         <InfoContainer>
-          <Info>Sebastian Jonathan Aurelius Fuchs</Info>
-          <Info>24.12.1989</Info>
+          <Info>{birthdayList[showPersonNo].name}</Info>
+          <Info>{birthdayList[showPersonNo].birthday}</Info>
         </InfoContainer>
-        <Age>32 years old</Age>
+        <Age>{calcAge(birthdayList[showPersonNo].birthday)} years old</Age>
       </FlexContainer>
     </>
   );

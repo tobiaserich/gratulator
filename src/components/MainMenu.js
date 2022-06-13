@@ -6,15 +6,16 @@ const Menu = styled("div")`
   position: absolute;
   direction: ltr;
   color: white;
-  top: 0px;
+  top: 70%;
   right: 0px;
-  z-index: 0;
-  width: calc(100%-10px);
+  z-index: 100;
   min-height: 100px;
   background-color: #413a50;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   padding: 30px 0 10px 10px;
+  width: 100%;
   transform-origin: top right;
+
   animation: ${({ animation }) => animation} 0.5s ease-in both;
 
   @keyframes fadeOut {
@@ -60,10 +61,7 @@ const MainMenu = () => {
     <>
       {menuActive ? (
         <Menu animation={animation}>
-          Odit id illo in. Laudantium consequatur sit repudiandae quas
-          voluptatem sed. Nihil nobis doloremque aut voluptas doloremque
-          tempora. Maiores accusantium blanditiis voluptates odio consequatur
-          ut. Consequatur perferendis quam laboriosam fugiat quia optio vitae.
+          Consequatur perferendis quam laboriosam fugiat quia optio vitae.
         </Menu>
       ) : (
         <></>

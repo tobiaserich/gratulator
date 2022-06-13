@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import MonthContainer from "./MonthContainer";
 import SeparationLine from "./SeparationLine";
+import calcAge from "../helper/calcAge";
 
 const Person = styled("div")`
   max-width: 255px;
@@ -33,11 +34,12 @@ const PersonalInformation = styled("div")`
 `;
 
 const H2 = styled("h2")`
+  display: inline-block;
   margin: 0 0 10px 7px;
-  padding-left: 10px;
+  border-bottom: 2px solid #bde0fe;
 `;
 
-const MonthlyBirthdayList = ({ ppl, counter = "all", dir }) => {
+const MonthlyBirthdayList = ({ ppl, counter = "all", dir, monthName }) => {
   const [ref, setRef] = React.useState("");
 
   const handleRef = (refInput) => {
@@ -52,19 +54,27 @@ const MonthlyBirthdayList = ({ ppl, counter = "all", dir }) => {
         dir={{ dir: dir, rotation: rotation }}
       >
         <AntiRotationContainer dir={{ dir: dir, rotation: rotation }}>
-          <H2>December</H2>
+          <H2>{monthName}</H2>
           {ppl.map((person, index) => {
             return index <=
               (typeof counter === "string" ? ppl.length - 1 : counter) ? (
               <>
-                <Person>
-                  <PersonalInformation>{person.name}</PersonalInformation>
-                  <PersonalInformation>{person.birthday}</PersonalInformation>
-                  <PersonalInformation>
-                    {person.age} years old
+                <Person key={person.name + "Container"}>
+                  <PersonalInformation key={person.name + "name"}>
+                    {person.name}
+                  </PersonalInformation>
+                  <PersonalInformation key={person.name + "birthday"}>
+                    {person.birthday}
+                  </PersonalInformation>
+                  <PersonalInformation key={person.name + "age"}>
+                    {calcAge(person.birthday)} years old
                   </PersonalInformation>
                 </Person>
-                <SeparationLine />
+                {ppl.length > 1 && index < ppl.length - 1 ? (
+                  <SeparationLine key={person.name + "line"} />
+                ) : (
+                  ""
+                )}
               </>
             ) : (
               <></>
