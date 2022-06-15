@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { DateContext } from "../context/context";
 
 const Button = styled("div")`
   height: 30px;
@@ -20,19 +21,13 @@ const Button = styled("div")`
   }
 `;
 
-
-const CalendarDayButton = ({ children, changeDay=()=>{}, currentDay }) => {
-  const [active, setActive] = React.useState(false);
-
-  React.useEffect(() => {
-    currentDay ? setActive(true) : setActive(false);
-  }, [currentDay]);
-
+const CalendarDayButton = ({ children }) => {
+  const context = React.useContext(DateContext);
   return (
     <>
       <Button
-        active={active}
-        onClick={() => changeDay({ name: "day", value: children })}
+        active={parseInt(children) === context.day}
+        onClick={() => context.changeDate("day", parseInt(children))}
       >
         {children}
       </Button>

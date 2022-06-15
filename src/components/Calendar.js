@@ -2,15 +2,27 @@ import React from "react";
 import styled from "@emotion/styled";
 import Dropdown from "./Dropdown";
 import CalendarDayButton from "./CalendarDayButton";
+import { DateContext } from "../context/context";
 
 const Container = styled("div")`
-  height: 220px;
   width: 280px;
   background-color: #4d445f;
   border-radius: 20px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-  position: relative;
+  position: absolute;
+  left: 0;
   padding-top: 50px;
+  z-index: 1100;
+  border-radius: 40px 20px 40px 20px;
+  animation: fadeIn 0.4s both;
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 const Head = styled("div")`
   border-radius: 20px 20px 0 0;
@@ -24,86 +36,58 @@ const Head = styled("div")`
 `;
 
 const Body = styled("div")`
+  color: black;
   height: 100%;
-  width: calc(100% - 10px);
   background-color: #605577;
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 40px 20px;
   padding: 5px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  row-gap: 5px;
 `;
+
 const DayName = styled("div")`
   width: 32px;
   text-align: center;
 `;
-const Calendar = () => {
-  const [chosenDate, setChosenDate] = React.useState(new Date());
-  const [currentDay, setCurrentDay] = React.useState(new Date().getDate());
-  const [currentMonth, setCurrentMonth] = React.useState("January");
-  const [currentYear, setCurrentYear] = React.useState("2000");
+const Calendar = ({ closeCalendar }) => {
+  const [closeDropdown, setCloseDropdown] = React.useState(false);
+  const context = React.useContext(DateContext);
+  const ref = React.useRef(null);
 
-  const firstDayOfMonth = () => {
-    const value = new Date(`${currentMonth} 1, ${currentYear}`).getDay();
-    const spacer = value === 0 ? 6 : value - 1;
-    return spacer;
-  };
-
-  const setDateElement = (value) => {
-    if (value.name === "month") {
-      setCurrentMonth(value.value);
-    } else if (value.name === "year") {
-      setCurrentYear(value.value);
-    } else if (value.name === "day") {
-      const date = new Date(`${currentMonth} ${value.value}, ${currentYear}`);
-      setChosenDate(date);
-      setCurrentDay(value.value);
-    }
-  };
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const monthLength = new Date(
-    currentYear,
-    months.indexOf(currentMonth) + 1,
-    0
-  ).getDate();
-
-  const makeItVisible = () => {
-    const result =
-      months.indexOf(currentMonth) === chosenDate.getMonth() &&
-      chosenDate.getFullYear() === currentYear;
-    return result;
-  };
-
+  const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const years = [
     2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011,
     2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022,
   ];
+
+  const firstDayOfMonth = () => {
+    const value = new Date(
+      `${months[context.month - 1]} 1, ${context.year}`
+    ).getDay();
+    const spacer = value === 0 ? 6 : value - 1;
+    return spacer;
+  };
+  const monthLength = new Date(context.year, context.month, 0).getDate();
+
+  const checkClick = (event) => {
+    if (ref?.current === event.target.offsetParent) {
+      console.log("hit");
+      setCloseDropdown(true);
+    }
+  };
   return (
-    <Container>
+    <Container ref={ref} onClick={checkClick}>
       <Head>
         <Dropdown
           menuFor="month"
           dropdownItems={months}
-          changeDate={setDateElement}
+          dropdownActive={{ closeDropdown, setCloseDropdown }}
         />
         <Dropdown
           menuFor="year"
           dropdownItems={years}
-          changeDate={setDateElement}
+          dropdownActive={{ closeDropdown, setCloseDropdown }}
         />
       </Head>
       <Body>
@@ -114,18 +98,11 @@ const Calendar = () => {
         <DayName>Fr</DayName>
         <DayName>Sa</DayName>
         <DayName>Su</DayName>
-        {new Array(firstDayOfMonth()).fill("").map(() => (
-          <div></div>
-        ))}
-        {new Array(monthLength).fill("").map((child, index) => {
-          return (
-            <CalendarDayButton
-              changeDay={setDateElement}
-              currentDay={currentDay === index + 1 && makeItVisible()}
-            >
-              {index + 1}
-            </CalendarDayButton>
-          );
+        {!isNaN(firstDayOfMonth())
+          ? new Array(firstDayOfMonth()).fill("").map(() => <div></div>)
+          : ""}
+        {new Array(monthLength)?.fill("").map((child, index) => {
+          return <CalendarDayButton>{index + 1}</CalendarDayButton>;
         })}
       </Body>
     </Container>
