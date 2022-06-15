@@ -14,7 +14,7 @@ const FlexContainer = styled("div")`
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   padding: 10px;
   margin: auto;
-  margin-top: 0;
+  margin-top: 17px;
   flex-direction: column;
   justify-content: space-between;
   font-family: "Arima Madurai";
@@ -68,7 +68,6 @@ const CounterBubble = styled("div")`
 
 const NextBirthday = ({ birthdayList }) => {
   const [showPersonNo, setShowPersonNo] = React.useState(0);
-
   const handleClick = (dir) => {
     if (dir === "left" && showPersonNo !== 0) {
       setShowPersonNo(showPersonNo - 1);
