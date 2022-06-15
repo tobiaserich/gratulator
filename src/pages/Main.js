@@ -104,7 +104,6 @@ const Main = () => {
   const [headerAnimation, setHeaderAnimation] = React.useState(null);
   const [touchPosition, setTouchPosition] = React.useState(null);
   const [isSticky, setIsSticky] = React.useState(false);
-  const [timeoutId, setTimeoutId] = React.useState();
 
   const sortedBirthdayList = sortBirthdays(birthdayList);
   const nextBirthday = getNextBirthday(sortedBirthdayList);

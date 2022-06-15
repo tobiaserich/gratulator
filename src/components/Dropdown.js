@@ -54,7 +54,9 @@ const Dropdown = ({ dropdownItems, menuFor, dropdownActive }) => {
   const [status, setStatus] = React.useState(false);
   const context = React.useContext(DateContext);
   React.useEffect(() => {
-    dropdownActive.closeDropdown === true ? setStatus(false) : console.log();
+    if (dropdownActive.closeDropdown === true) {
+      setStatus(false);
+    }
   }, [dropdownActive]);
   const months = [
     "January",

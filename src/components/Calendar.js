@@ -72,7 +72,6 @@ const Calendar = ({ closeCalendar }) => {
 
   const checkClick = (event) => {
     if (ref?.current === event.target.offsetParent) {
-      console.log("hit");
       setCloseDropdown(true);
     }
   };
