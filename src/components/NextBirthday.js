@@ -79,9 +79,9 @@ const NextBirthday = ({ birthdayList }) => {
   return (
     <>
       <FlexContainer>
-        {birthdayList.length > 1 ? (
+        {birthdayList?.length > 1 ? (
           <>
-            <CounterBubble>+{birthdayList.length - 1}</CounterBubble>
+            <CounterBubble>+{birthdayList?.length - 1}</CounterBubble>
             <ArrowButton direction="left" onClick={() => handleClick("left")} />
             <ArrowButton
               direction="right"
@@ -91,16 +91,16 @@ const NextBirthday = ({ birthdayList }) => {
         ) : (
           ""
         )}
-        {birthdayList[0].profileImg ? (
+        {birthdayList[0]?.profileImg ? (
           <ImageContainer src={imgPlaceholder} />
         ) : (
           <></>
         )}
         <InfoContainer>
-          <Info>{birthdayList[showPersonNo].name}</Info>
-          <Info>{birthdayList[showPersonNo].birthday}</Info>
+          <Info>{birthdayList[showPersonNo]?.name}</Info>
+          <Info>{birthdayList[showPersonNo]?.birthday}</Info>
         </InfoContainer>
-        <Age>{calcAge(birthdayList[showPersonNo].birthday)} years old</Age>
+        <Age>{calcAge(birthdayList[showPersonNo]?.birthday)} years old</Age>
       </FlexContainer>
     </>
   );
