@@ -1,4 +1,8 @@
 const getNextBirthday = (sortedBirthdays) => {
+  if (!sortedBirthdays) {
+    return [];
+  }
+
   const today = new Date();
   const removePastBirthdays = sortedBirthdays
     .map((singlePerson) => {
@@ -9,6 +13,9 @@ const getNextBirthday = (sortedBirthdays) => {
       return null;
     })
     .filter((x) => x);
+  if (removePastBirthdays.length === 0) {
+    removePastBirthdays.push(sortedBirthdays[0]);
+  }
   return removePastBirthdays.filter(
     (x) =>
       new Date(x.birthday).setFullYear(2022) ===
