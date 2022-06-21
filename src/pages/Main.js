@@ -6,6 +6,7 @@ import getNextBirthday from "../helper/getNextBirthday";
 import sortBirthdays from "../helper/sortBirthdays";
 import MainMenu from "../components/MainMenu";
 import AddPersonForm from "../components/AddPersonForm";
+import { get } from "idb-keyval";
 
 const Header = styled("div")`
   display: flex;
@@ -47,63 +48,27 @@ const Container = styled("div")`
   ${({ isFormActive }) => (isFormActive ? "height:100vh;overflow:hidden;" : "")}
 `;
 
-const birthdayList = [
-  {
-    name: "Tobias Erich",
-    birthday: "1989/12/24",
-  },
-  {
-    name: "Alton Ritter",
-    birthday: "1990/01/20",
-  },
-  {
-    name: "Billie Fields",
-    birthday: "1985/10/22",
-  },
-  {
-    name: "Stuart Fletcher",
-    birthday: "1987/06/15",
-  },
-  {
-    name: "Amy Sanders",
-    birthday: "1963/06/15",
-  },
-  {
-    name: "Simon Aurelius Friderichson Halfting",
-    birthday: "1939/06/15",
-  },
-  {
-    name: "Max Him",
-    birthday: "1999/06/15",
-  },
-
-  {
-    name: "Waverly Hutchinson",
-    birthday: "2003/12/20",
-  },
-  {
-    name: "DeForest Sutton",
-    birthday: "1985/10/01",
-  },
-  {
-    name: "Jim English",
-    birthday: "1995/12/19",
-  },
-  {
-    name: "Burley Lindsey",
-    birthday: "2001/09/04",
-  },
-  {
-    name: "Champ Pugh",
-    birthday: "1991/07/22",
-  },
-];
-
+const Info = styled("div")`
+  color: #24202c;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 40%;
+  text-align: center;
+`;
 const Main = () => {
-  const [addPersonFormVisible, setAddPersonFormVisible] = React.useState(true);
+  const [addPersonFormVisible, setAddPersonFormVisible] = React.useState(false);
   const [headerAnimation, setHeaderAnimation] = React.useState(null);
   const [touchPosition, setTouchPosition] = React.useState(null);
   const [isSticky, setIsSticky] = React.useState(false);
+  const [birthdayList, setBirthdayList] = React.useState();
+
+  const getBirthdayList = async () => {
+    get("gratulator").then((val) => setBirthdayList(val));
+  };
+
+  React.useEffect(() => {
+    getBirthdayList();
+  }, []);
 
   const sortedBirthdayList = sortBirthdays(birthdayList);
   const nextBirthday = getNextBirthday(sortedBirthdayList);
@@ -122,7 +87,7 @@ const Main = () => {
     "December",
   ];
   let birthdaysPerMonth = {};
-  sortedBirthdayList.forEach((singlePerson) => {
+  sortedBirthdayList?.forEach((singlePerson) => {
     const monthName = months[new Date(singlePerson.birthday).getMonth()];
     birthdaysPerMonth[monthName]
       ? birthdaysPerMonth[monthName].push(singlePerson)
@@ -185,23 +150,42 @@ const Main = () => {
   };
 
   return (
-    <Container
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onWheel={handleWheel}
-      isFormActive={addPersonFormVisible}
-    >
-      {addPersonFormVisible ? (
-        <AddPersonForm closeForm={() => setAddPersonFormVisible(false)} />
-      ) : (
-        ""
-      )}
-      <Header isSticky={isSticky} animate={headerAnimation}>
-        Gratulator <MainMenu setFormVisible={setAddPersonFormVisible} />
-      </Header>
-      <NextBirthday birthdayList={nextBirthday} />
-      {IterateTroughMonths()}
-    </Container>
+    <>
+      <Container
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onWheel={handleWheel}
+        isFormActive={addPersonFormVisible}
+      >
+        {addPersonFormVisible ? (
+          <AddPersonForm
+            closeForm={() => setAddPersonFormVisible(false)}
+            updateBirthdayList={getBirthdayList}
+          />
+        ) : (
+          ""
+        )}
+        <Header isSticky={isSticky} animate={headerAnimation}>
+          Gratulator
+          <MainMenu
+            setFormVisible={setAddPersonFormVisible}
+            getBirthdayList={getBirthdayList}
+          />
+        </Header>
+        {birthdayList ? (
+          <>
+            <NextBirthday birthdayList={nextBirthday} />
+            {IterateTroughMonths()}
+          </>
+        ) : (
+          <Info>
+            It seems you don't have any entry yet.
+            <br />
+            <br /> Click on the burger menu and add a new Person.
+          </Info>
+        )}
+      </Container>
+    </>
   );
 };
 
