@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "@emotion/styled";
 import BurgerMenu from "./BurgerMenu";
+import Button from "./Button";
 
 const Menu = styled("div")`
   position: absolute;
   direction: ltr;
-  color: white;
+  color: black;
+  text-shadow: none;
   top: 70%;
   right: 0px;
   z-index: 100;
@@ -15,7 +17,6 @@ const Menu = styled("div")`
   padding: 30px 0 10px 10px;
   width: 100%;
   transform-origin: top right;
-
   animation: ${({ animation }) => animation} 0.5s ease-in both;
 
   @keyframes fadeOut {
@@ -39,7 +40,14 @@ const Menu = styled("div")`
   }
 `;
 
-const MainMenu = () => {
+const ShadowElement = styled("div")`
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  z-index: 50;
+`;
+const MainMenu = ({ setFormVisible }) => {
   const [menuActive, setMenuActive] = React.useState(false);
   const [animation, setAnimation] = React.useState("initial");
   const [timerId, setTimerId] = React.useState();
@@ -60,9 +68,20 @@ const MainMenu = () => {
   return (
     <>
       {menuActive ? (
-        <Menu animation={animation}>
-          Consequatur perferendis quam laboriosam fugiat quia optio vitae.
-        </Menu>
+        <>
+          <Menu animation={animation}>
+            <Button
+              size="big"
+              handleClick={() => {
+                setFormVisible(true);
+                handleClick();
+              }}
+            >
+              Add new Person
+            </Button>
+          </Menu>
+          <ShadowElement onClick={() => handleClick()} />
+        </>
       ) : (
         <></>
       )}

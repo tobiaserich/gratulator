@@ -14,6 +14,10 @@ const ButtonComp = styled("div")`
   border-radius: 23px;
   margin-bottom: 5px;
   user-select: none;
+  margin: auto;
+  position: relative;
+  z-index: 1000;
+  pointer-events: auto;
 
   :hover {
     box-shadow: 0px 2px 10px #cdb4db;
@@ -23,7 +27,9 @@ const ButtonComp = styled("div")`
   }
 `;
 
-const Button = ({ size, children }) => (
-  <ButtonComp size={size}>{children}</ButtonComp>
+const Button = ({ size, children, handleClick }) => (
+  <ButtonComp onClick={handleClick} size={size}>
+    {children}
+  </ButtonComp>
 );
 export default Button;

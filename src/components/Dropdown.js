@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "@emotion/styled";
 import ArrowDown from "../assets/ArrowDown.svg";
+import { DateContext } from "../context/context";
 
 const DropdownContainer = styled("div")`
+  color: black;
   display: inline-flex;
   font-family: "Arima Madurai";
   flex-direction: column;
@@ -12,13 +14,13 @@ const DropdownContainer = styled("div")`
   position: relative;
   ${({ status }) =>
     status === false
-      ? "max-height: 20px;"
+      ? { maxHeight: "30px" }
       : "overflow: scroll;scrollbar-width:thin;max-height:240px;"};
   border: 1px solid black;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   background-color: #d9d9d9;
-  > :last-child {
+  > {
     :after {
       display: inline-block;
       content: "";
@@ -48,63 +50,39 @@ const Item = styled("div")`
     isCurrentValue ? "background-color:#A2D2FF;" : ""};
 `;
 
-const Dropdown = ({ dropdownItems, changeDate = () => {}, menuFor }) => {
+const Dropdown = ({ dropdownItems, menuFor, dropdownActive }) => {
   const [status, setStatus] = React.useState(false);
-  const [currentValue, setCurrentValue] = React.useState(dropdownItems[0]);
-
+  const context = React.useContext(DateContext);
   React.useEffect(() => {
-    changeDate({ name: menuFor, value: currentValue });
-  }, [currentValue]);
-
-  React.useEffect(() => {
-    if (menuFor === "month") {
-      const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-      const month = months[new Date().getMonth()];
-      const position = dropdownItems.indexOf(month);
-      setCurrentValue(dropdownItems[position]);
-    } else if (menuFor === "year") {
-      setCurrentValue(new Date().getFullYear());
+    if (dropdownActive.closeDropdown === true) {
+      setStatus(false);
     }
-  }, []);
+  }, [dropdownActive]);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
-  const handleClick = (item) => {
-    setCurrentValue(item);
-  };
-
-  const isCurrentValue = (item) => {
-    return item === currentValue ? true : false;
-  };
-
-  const findCurrentPositionArr = () => {
-    const currentPos = dropdownItems.findIndex(
-      (value) => value === currentValue
-    );
-    return currentPos;
-  };
   const handleKey = (event) => {
-    const currentPos = findCurrentPositionArr();
     switch (event.key) {
       case "ArrowDown":
-        if (currentPos < dropdownItems.length - 1) {
-          setCurrentValue(dropdownItems[currentPos + 1]);
+        if (context[menuFor] > 0 && context[menuFor] < dropdownItems.at(-1)) {
+          context.changeDate(menuFor, context[menuFor] + 1);
         }
         break;
       case "ArrowUp":
-        if (currentPos >= 1) {
-          setCurrentValue(dropdownItems[currentPos - 1]);
+        if (context[menuFor] > 1 && context[menuFor] > dropdownItems[0]) {
+          context.changeDate(menuFor, context[menuFor] - 1);
         }
         break;
       case "Enter":
@@ -115,26 +93,32 @@ const Dropdown = ({ dropdownItems, changeDate = () => {}, menuFor }) => {
     }
   };
 
+  const handleStatusChange = (e) => {
+    e.currentTarget.scroll(0, 0);
+    setStatus(!status);
+    dropdownActive.setCloseDropdown(false);
+  };
   return (
     <>
       <DropdownContainer
         data-testid="dropdown"
         tabIndex={0}
-        onKeyUp={(event) => handleKey(event)}
-        onClick={() => setStatus(!status)}
+        onKeyUp={(event) => {
+          handleKey(event);
+        }}
+        onClick={handleStatusChange}
         status={status}
       >
-        {[currentValue, ...dropdownItems]?.map((item, index) => {
+        {[context[menuFor], ...dropdownItems]?.map((item, index) => {
           if (index === 0) {
             return (
               <>
                 <Item
                   data-testid="firstElement"
                   hoverable={false}
-                  onClick={() => handleClick(item)}
                   key={item + index}
                 >
-                  {item < 10 ? `0${item}` : item}
+                  {months[item - 1] || item}
                   <Image
                     src={ArrowDown}
                     key={item + index + "img"}
@@ -146,12 +130,14 @@ const Dropdown = ({ dropdownItems, changeDate = () => {}, menuFor }) => {
           } else {
             return (
               <Item
-                onClick={() => handleClick(item)}
-                isCurrentValue={isCurrentValue(item)}
+                onClick={() => {
+                  context.changeDate(menuFor, item);
+                }}
+                isCurrentValue={item === context[menuFor]}
                 hoverable={true}
                 key={item + index}
               >
-                {item < 10 ? `0${item}` : item}
+                {menuFor === "month" ? months[item - 1] : item}
               </Item>
             );
           }

@@ -11,6 +11,7 @@ const CalendarButton = styled("button")`
   background-repeat: no-repeat;
   background-position: center;
   background-image: url("${calendarSymbol}");
+  margin-top: 5px;
   :hover {
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
   }

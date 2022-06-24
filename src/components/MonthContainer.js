@@ -20,7 +20,6 @@ const Container = styled("div")`
 const MonthContainer = ({ handleRef = () => {}, dir, children }) => {
   const ref = React.useRef("");
   handleRef(ref);
-  console.log(dir);
   return (
     <>
       <Container ref={ref} rotDir={dir}>
