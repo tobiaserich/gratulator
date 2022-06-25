@@ -5,6 +5,8 @@ import Input from "./Input";
 import CalendarButton from "./CalendarButton";
 import Button from "./Button";
 import { DateProvider } from "../context/context";
+import { get, set, update } from "idb-keyval";
+
 
 const Background = styled("div")`
   height: 100%;
@@ -53,6 +55,7 @@ const BirthdayContainer = styled(InputContainer)`
   align-items: normal;
   font-size: 20px;
   font-weight: bold;
+  margin-bottom: -15px;
 `;
 
 const Label = styled("label")`
@@ -68,17 +71,109 @@ const H3 = styled("h3")`
 
 const ButtonBar = styled("div")`
   display: flex;
-  margin-top: 40px;
+  margin-top: ${({ errorMessageActive }) => {
+    let sum = 40;
+    if (errorMessageActive.name === true) {
+      sum = sum - 8;
+    }
+    if (errorMessageActive.date === true) {
+      sum = sum - 32;
+    }
+    return `${sum}px;`;
+  }};
 `;
-
-const AddPersonForm = ({ closeForm }) => {
+const ErrorMessage = styled("span")`
+  color: red;
+  font-size: 12px;
+  margin-top: -6px;
+  margin-bottom: -5px;
+`;
+const AddPersonForm = ({ closeForm, updateBirthdayList }) => {
   const [calendarVisible, setCalendarVisible] = React.useState(false);
+  const [errorForm, setErrorForm] = React.useState({
+    name: false,
+    date: false,
+    day: false,
+    month: false,
+    year: false,
+  });
   const ref = React.useRef(null);
 
   const checkClick = (event) => {
     if (ref.current === event.target.offsetParent && calendarVisible) {
       setCalendarVisible(false);
     }
+  };
+
+  const validateSubmit = (context) => {
+    //name
+    const newErrorForm = { ...errorForm };
+    if (context.name === "") {
+      newErrorForm.name = true;
+      setErrorForm(newErrorForm);
+    } else if (context.name !== "") {
+      newErrorForm.name = false;
+      setErrorForm(newErrorForm);
+    }
+    //year
+    if (typeof context.year !== "number" || context.year < 1900) {
+      newErrorForm.date = true;
+      setErrorForm(newErrorForm);
+    } else if (typeof context.year === "number" && context.year >= 1900) {
+      newErrorForm.date = false;
+      setErrorForm(newErrorForm);
+    }
+    //month
+    if (context.month > 12 || typeof context.month !== "number") {
+      newErrorForm.date = true;
+      setErrorForm(newErrorForm);
+    } else if (context.month <= 12 && typeof context.month === "number") {
+      newErrorForm.date = false;
+      setErrorForm(newErrorForm);
+    }
+    //day
+    if (
+      context.day > new Date(context.year, context.month, 0).getDate() ||
+      typeof context.day !== "number"
+    ) {
+      newErrorForm.date = true;
+      setErrorForm(newErrorForm);
+    } else if (
+      context.day <= new Date(context.year, context.month, 0).getDate() &&
+      typeof context.day !== "number"
+    ) {
+      newErrorForm.date = false;
+      setErrorForm(newErrorForm);
+    }
+    return newErrorForm.date === true || newErrorForm.name === true
+      ? false
+      : true;
+  };
+  const handleSubmit = async (context) => {
+    const result = await get("gratulator");
+    const submitValidated = validateSubmit(context);
+    if (submitValidated) {
+      if (result) {
+        update("gratulator", (val) => {
+          val.push({
+            name: context.name,
+            birthday: `${context.year}/${context.month}/${context.day}`,
+          });
+
+          return val;
+        });
+      } else {
+        await set("gratulator", [
+          {
+            name: context.name,
+            birthday: `${context.year}/${context.month}/${context.day}`,
+          },
+        ]);
+      }
+      closeForm();
+    }
+    updateBirthdayList();
+    // context.changeDate("default");
   };
   return (
     <DateProvider>
@@ -88,7 +183,13 @@ const AddPersonForm = ({ closeForm }) => {
           <InputContainer>
             <Label title="full name">
               <H3>Name</H3>
-              <Input forComponent="name"></Input>
+
+              <Input forComponent="name" part="name"></Input>
+              {errorForm.name ? (
+                <ErrorMessage>wrong name format</ErrorMessage>
+              ) : (
+                ""
+              )}
             </Label>
           </InputContainer>
           <H3 title="dd/mm/yyyy">Birthday</H3>
@@ -117,9 +218,18 @@ const AddPersonForm = ({ closeForm }) => {
               )}
             </div>
           </BirthdayContainer>
-          <ButtonBar>
-            <Button size="small">cancel</Button>
-            <Button size="small">Submit</Button>
+          {errorForm.date ? (
+            <ErrorMessage>please insert valid date</ErrorMessage>
+          ) : (
+            ""
+          )}
+          <ButtonBar errorMessageActive={errorForm}>
+            <Button size="small" handleClick={closeForm}>
+              cancel
+            </Button>
+            <Button size="small" handleClick={handleSubmit}>
+              Submit
+            </Button>
           </ButtonBar>
         </form>
       </Container>

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import BurgerMenu from "./BurgerMenu";
 import Button from "./Button";
+import { set } from "idb-keyval";
 
 const Menu = styled("div")`
   position: absolute;
@@ -47,7 +48,8 @@ const ShadowElement = styled("div")`
   top: 0;
   z-index: 50;
 `;
-const MainMenu = ({ setFormVisible }) => {
+
+const MainMenu = ({ setFormVisible, getBirthdayList }) => {
   const [menuActive, setMenuActive] = React.useState(false);
   const [animation, setAnimation] = React.useState("initial");
   const [timerId, setTimerId] = React.useState();
@@ -72,6 +74,7 @@ const MainMenu = ({ setFormVisible }) => {
           <Menu animation={animation}>
             <Button
               size="big"
+              clickType="normal"
               handleClick={() => {
                 setFormVisible(true);
                 handleClick();
