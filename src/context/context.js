@@ -10,7 +10,6 @@ const DateProvider = (props) => {
   const changeDate = (part, value) => {
     switch (part) {
       case "default":
-        console.log("lol");
         setInputDay(new Date().getDate());
         setInputMonth(new Date().getMonth() + 1);
         setInputYear(new Date().getFullYear());
@@ -38,7 +37,6 @@ const DateProvider = (props) => {
         } else {
           setInputYear("");
         }
-
         break;
       case "name":
         if (value) {

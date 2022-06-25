@@ -22,7 +22,6 @@ const ButtonComp = styled("div")`
   z-index: 1000;
   pointer-events: auto;
   color: black;
-
   :hover {
     box-shadow: 0px 2px 10px #cdb4db;
   }

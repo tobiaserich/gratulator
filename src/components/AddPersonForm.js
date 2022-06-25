@@ -7,6 +7,7 @@ import Button from "./Button";
 import { DateProvider } from "../context/context";
 import { get, set, update } from "idb-keyval";
 
+
 const Background = styled("div")`
   height: 100%;
   width: 100%;
@@ -182,6 +183,7 @@ const AddPersonForm = ({ closeForm, updateBirthdayList }) => {
           <InputContainer>
             <Label title="full name">
               <H3>Name</H3>
+
               <Input forComponent="name" part="name"></Input>
               {errorForm.name ? (
                 <ErrorMessage>wrong name format</ErrorMessage>

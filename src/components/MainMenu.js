@@ -48,6 +48,7 @@ const ShadowElement = styled("div")`
   top: 0;
   z-index: 50;
 `;
+
 const MainMenu = ({ setFormVisible, getBirthdayList }) => {
   const [menuActive, setMenuActive] = React.useState(false);
   const [animation, setAnimation] = React.useState("initial");
