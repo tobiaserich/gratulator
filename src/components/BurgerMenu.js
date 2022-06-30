@@ -7,7 +7,7 @@ const SingleBurgerLine = styled("div")`
   border-radius: 10px;
   background-color: #a2d2ff;
   animation: ${({ pos, animation }) =>
-    animation === "initial" ? "" : `${animation}${pos} 0.5s ease-in both;`};
+    animation === "initial" ? "" : `${animation}${pos} 0.2s ease-in both;`};
 
   @keyframes transformToX1 {
     0% {
@@ -68,7 +68,7 @@ const BurgerContainer = styled("div")`
   flex-direction: column;
   justify-content: space-between;
   animation: ${({ animation }) =>
-    animation === "initial" ? "" : `${animation}4 0.5s ease-out both`};
+    animation === "initial" ? "" : `${animation}4 0.2s ease-out both`};
   @keyframes transformToX4 {
     0% {
     }
