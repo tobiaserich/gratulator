@@ -18,7 +18,7 @@ const Menu = styled("div")`
   padding: 30px 0 10px 10px;
   width: 100%;
   transform-origin: top right;
-  animation: ${({ animation }) => animation} 0.5s ease-in both;
+  animation: ${({ animation }) => animation} 0.2s ease-in both;
 
   @keyframes fadeOut {
     0% {
@@ -76,7 +76,7 @@ const MainMenu = ({ setFormVisible, getBirthdayList }) => {
               size="big"
               clickType="normal"
               handleClick={() => {
-                setFormVisible(true);
+                setFormVisible("addPerson");
                 handleClick();
               }}
             >

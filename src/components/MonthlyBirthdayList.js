@@ -39,7 +39,13 @@ const H2 = styled("h2")`
   border-bottom: 2px solid #bde0fe;
 `;
 
-const MonthlyBirthdayList = ({ ppl, counter = "all", dir, monthName }) => {
+const MonthlyBirthdayList = ({
+  ppl,
+  counter = "all",
+  dir,
+  month,
+  openChangePersonForm,
+}) => {
   const [ref, setRef] = React.useState("");
 
   const handleRef = (refInput) => {
@@ -47,6 +53,9 @@ const MonthlyBirthdayList = ({ ppl, counter = "all", dir, monthName }) => {
   };
   const rotation = ref.current?.offsetHeight < 600 ? true : false;
 
+  const handleClick = (indexNo) => {
+    openChangePersonForm({ month, indexNo });
+  };
   return (
     <>
       <MonthContainer
@@ -54,12 +63,15 @@ const MonthlyBirthdayList = ({ ppl, counter = "all", dir, monthName }) => {
         dir={{ dir: dir, rotation: rotation }}
       >
         <AntiRotationContainer dir={{ dir: dir, rotation: rotation }}>
-          <H2>{monthName}</H2>
+          <H2>{month}</H2>
           {ppl.map((person, index) => {
             return index <=
               (typeof counter === "string" ? ppl.length - 1 : counter) ? (
               <>
-                <Person key={person.name + "Container"}>
+                <Person
+                  key={person.name + "Container"}
+                  onClick={() => handleClick(index)}
+                >
                   <PersonalInformation key={person.name + "name"}>
                     {person.name}
                   </PersonalInformation>

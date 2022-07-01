@@ -7,6 +7,8 @@ import sortBirthdays from "../helper/sortBirthdays";
 import MainMenu from "../components/MainMenu";
 import AddPersonForm from "../components/AddPersonForm";
 import { get } from "idb-keyval";
+import ChangePersonForm from "../components/ChangePersonForm";
+import { DateProvider, DateContext } from "../context/context";
 
 const Header = styled("div")`
   display: flex;
@@ -56,14 +58,17 @@ const Info = styled("div")`
   text-align: center;
 `;
 const Main = () => {
-  const [addPersonFormVisible, setAddPersonFormVisible] = React.useState(false);
+  const [formVisible, setFormVisible] = React.useState(false);
   const [headerAnimation, setHeaderAnimation] = React.useState(null);
   const [touchPosition, setTouchPosition] = React.useState(null);
   const [isSticky, setIsSticky] = React.useState(false);
   const [birthdayList, setBirthdayList] = React.useState();
+  const [personData, setPersonData] = React.useState();
 
   const getBirthdayList = async () => {
-    get("gratulator").then((val) => setBirthdayList(val));
+    get("gratulator").then((val) => {
+      setBirthdayList(val);
+    });
   };
 
   React.useEffect(() => {
@@ -93,23 +98,6 @@ const Main = () => {
       ? birthdaysPerMonth[monthName].push(singlePerson)
       : (birthdaysPerMonth[monthName] = new Array(singlePerson));
   });
-
-  const IterateTroughMonths = () => {
-    const collectMonths = [];
-    let counter = 0;
-
-    for (const key in birthdaysPerMonth) {
-      counter++;
-      collectMonths.push(
-        <MonthlyBirthdayList
-          ppl={birthdaysPerMonth[key]}
-          dir={counter % 2 === 0 ? "right" : "left"}
-          monthName={key}
-        />
-      );
-    }
-    return collectMonths;
-  };
 
   const handleTouchStart = (e) => {
     const touchDown = e.touches[0].clientY;
@@ -149,26 +137,66 @@ const Main = () => {
     }
   };
 
+  const openChangePersonForm = (personData) => {
+    const person = birthdaysPerMonth[personData.month][personData.indexNo];
+    const position = birthdayList.findIndex((singlePerson) => {
+      return (
+        singlePerson.name === person.name &&
+        singlePerson.birthday === person.birthday
+      );
+    });
+    setPersonData({ ...birthdayList[position], indexNo: position });
+    setFormVisible("changePerson");
+  };
+
+  const IterateTroughMonths = () => {
+    const collectMonths = [];
+    let counter = 0;
+
+    for (const key in birthdaysPerMonth) {
+      counter++;
+      collectMonths.push(
+        <MonthlyBirthdayList
+          ppl={birthdaysPerMonth[key]}
+          dir={counter % 2 === 0 ? "right" : "left"}
+          month={key}
+          openChangePersonForm={openChangePersonForm}
+        />
+      );
+    }
+    return collectMonths;
+  };
+
   return (
     <>
       <Container
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onWheel={handleWheel}
-        isFormActive={addPersonFormVisible}
+        isFormActive={formVisible}
       >
-        {addPersonFormVisible ? (
-          <AddPersonForm
-            closeForm={() => setAddPersonFormVisible(false)}
-            updateBirthdayList={getBirthdayList}
-          />
+        {formVisible === "addPerson" ? (
+          <DateProvider>
+            <AddPersonForm
+              closeForm={() => setFormVisible(false)}
+              updateBirthdayList={getBirthdayList}
+            />
+          </DateProvider>
+        ) : formVisible === "changePerson" ? (
+          <DateProvider>
+            <ChangePersonForm
+              closeForm={() => setFormVisible(false)}
+              updateBirthdayList={getBirthdayList}
+              personData={personData}
+            />
+          </DateProvider>
         ) : (
           ""
         )}
         <Header isSticky={isSticky} animate={headerAnimation}>
           Gratulator
           <MainMenu
-            setFormVisible={setAddPersonFormVisible}
+            setFormVisible={setFormVisible}
             getBirthdayList={getBirthdayList}
           />
         </Header>
@@ -179,7 +207,7 @@ const Main = () => {
           </>
         ) : (
           <Info>
-            It seems you don't have any entry yet.
+            It seems you don't have any entries yet.
             <br />
             <br /> Click on the burger menu and add a new Person.
           </Info>
