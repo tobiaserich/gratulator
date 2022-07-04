@@ -2,7 +2,6 @@ import React from "react";
 import styled from "@emotion/styled";
 import BurgerMenu from "./BurgerMenu";
 import Button from "./Button";
-import { set } from "idb-keyval";
 
 const Menu = styled("div")`
   position: absolute;
@@ -49,10 +48,12 @@ const ShadowElement = styled("div")`
   z-index: 50;
 `;
 
-const MainMenu = ({ setFormVisible, getBirthdayList }) => {
+const MainMenu = ({ setFormVisible }) => {
   const [menuActive, setMenuActive] = React.useState(false);
   const [animation, setAnimation] = React.useState("initial");
   const [timerId, setTimerId] = React.useState();
+
+  //set animation on menu button click and offside click
   const handleClick = () => {
     if (menuActive === true) {
       setAnimation("fadeOut");
@@ -83,7 +84,7 @@ const MainMenu = ({ setFormVisible, getBirthdayList }) => {
               Add new Person
             </Button>
           </Menu>
-          <ShadowElement onClick={() => handleClick()} />
+          <ShadowElement onClick={handleClick} />
         </>
       ) : (
         <></>

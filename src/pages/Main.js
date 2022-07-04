@@ -8,7 +8,7 @@ import MainMenu from "../components/MainMenu";
 import AddPersonForm from "../components/AddPersonForm";
 import { get } from "idb-keyval";
 import ChangePersonForm from "../components/ChangePersonForm";
-import { DateProvider, DateContext } from "../context/context";
+import { DateProvider } from "../context/context";
 
 const Header = styled("div")`
   display: flex;
@@ -64,19 +64,6 @@ const Main = () => {
   const [isSticky, setIsSticky] = React.useState(false);
   const [birthdayList, setBirthdayList] = React.useState();
   const [personData, setPersonData] = React.useState();
-
-  const getBirthdayList = async () => {
-    get("gratulator").then((val) => {
-      setBirthdayList(val);
-    });
-  };
-
-  React.useEffect(() => {
-    getBirthdayList();
-  }, []);
-
-  const sortedBirthdayList = sortBirthdays(birthdayList);
-  const nextBirthday = getNextBirthday(sortedBirthdayList);
   const months = [
     "January",
     "February",
@@ -91,6 +78,21 @@ const Main = () => {
     "November",
     "December",
   ];
+
+  //fetch db
+  const getBirthdayList = async () => {
+    get("gratulator").then((val) => {
+      setBirthdayList(val);
+    });
+  };
+
+  React.useEffect(() => {
+    getBirthdayList();
+  }, []);
+
+  //sort fetched data
+  const sortedBirthdayList = sortBirthdays(birthdayList);
+  const nextBirthday = getNextBirthday(sortedBirthdayList);
   let birthdaysPerMonth = {};
   sortedBirthdayList?.forEach((singlePerson) => {
     const monthName = months[new Date(singlePerson.birthday).getMonth()];
@@ -99,6 +101,7 @@ const Main = () => {
       : (birthdaysPerMonth[monthName] = new Array(singlePerson));
   });
 
+  // handle user interactions
   const handleTouchStart = (e) => {
     const touchDown = e.touches[0].clientY;
     setTouchPosition(touchDown);
@@ -137,6 +140,7 @@ const Main = () => {
     }
   };
 
+  // handle click on single entry
   const openChangePersonForm = (personData) => {
     const person = birthdaysPerMonth[personData.month][personData.indexNo];
     const position = birthdayList.findIndex((singlePerson) => {
@@ -149,6 +153,7 @@ const Main = () => {
     setFormVisible("changePerson");
   };
 
+  // prepare data for rendering
   const IterateTroughMonths = () => {
     const collectMonths = [];
     let counter = 0;
@@ -157,8 +162,9 @@ const Main = () => {
       counter++;
       collectMonths.push(
         <MonthlyBirthdayList
+          key={key}
           ppl={birthdaysPerMonth[key]}
-          dir={counter % 2 === 0 ? "right" : "left"}
+          bgColor={counter % 2}
           month={key}
           openChangePersonForm={openChangePersonForm}
         />

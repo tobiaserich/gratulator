@@ -95,6 +95,8 @@ const BurgerMenu = ({ menuAnimation }) => {
     fadeOut: "transformFromX",
     fadeIn: "transformToX",
   };
+
+  //change animation depending on menuAnimation prop
   React.useEffect(() => {
     setAnimationName(animationTrigger[menuAnimation]);
   }, [menuAnimation]);
