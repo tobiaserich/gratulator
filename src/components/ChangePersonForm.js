@@ -38,7 +38,8 @@ const ChangePersonForm = ({ closeForm, updateBirthdayList, personData }) => {
   };
 
   // submit and validate form data
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const validated = setCheckValues(context);
     if (validated) {
       update("gratulator", (val) => {

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { DateContext } from "../context/context";
 
-const Button = styled("div")`
+const Button = styled("button")`
   height: 30px;
   width: 30px;
   background: ${({ active }) => (active ? "#A2D2FF" : "#d9d9d9")};
@@ -27,7 +27,10 @@ const CalendarDayButton = ({ children }) => {
     <>
       <Button
         active={parseInt(children) === context.day}
-        onClick={() => context.changeDate("day", parseInt(children))}
+        onClick={(e) => {
+          e.preventDefault();
+          context.changeDate("day", parseInt(children));
+        }}
       >
         {children}
       </Button>

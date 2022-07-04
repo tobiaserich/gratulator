@@ -57,9 +57,11 @@ const SingleBurgerLine = styled("div")`
   }
 `;
 
-const BurgerContainer = styled("div")`
+const BurgerContainer = styled("button")`
+  border: none;
+  background-color: transparent;
   width: 25px;
-  height: 17px;
+  height: 19px;
   display: flex;
   position: absolute;
   right: 15px;
@@ -89,7 +91,7 @@ const BurgerContainer = styled("div")`
   }
 `;
 
-const BurgerMenu = ({ menuAnimation }) => {
+const BurgerMenu = ({ menuAnimation, onClick }) => {
   const [animationName, setAnimationName] = React.useState("initial");
   const animationTrigger = {
     fadeOut: "transformFromX",
@@ -102,7 +104,11 @@ const BurgerMenu = ({ menuAnimation }) => {
   }, [menuAnimation]);
 
   return (
-    <BurgerContainer animation={animationName}>
+    <BurgerContainer
+      aria-label="menu"
+      onClick={onClick}
+      animation={animationName}
+    >
       <SingleBurgerLine animation={animationName} pos={1} />
       <SingleBurgerLine animation={animationName} pos={2} />
       <SingleBurgerLine animation={animationName} pos={3} />
