@@ -50,19 +50,17 @@ const DayName = styled("div")`
   width: 32px;
   text-align: center;
 `;
-const Calendar = ({ closeCalendar }) => {
+const Calendar = () => {
   const [closeDropdown, setCloseDropdown] = React.useState(false);
   const context = React.useContext(DateContext);
   const ref = React.useRef(null);
 
   const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const years = [
-    1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991,
-    1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
-    2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
-    2016, 2017, 2018, 2019, 2020, 2021, 2022,
-  ];
+  const years = new Array(120)
+    .fill()
+    .map((v, index) => new Date().getFullYear() - index);
 
+  //check which weekday is the first day of the month and return the required amount of spacer
   const firstDayOfMonth = () => {
     const value = new Date(
       `${months[context.month - 1]} 1, ${context.year}`
@@ -70,8 +68,10 @@ const Calendar = ({ closeCalendar }) => {
     const spacer = value === 0 ? 6 : value - 1;
     return spacer;
   };
+  //check the month length to handle 30/31 day months and also february in leap/non-leap years
   const monthLength = new Date(context.year, context.month, 0).getDate();
 
+  //close dropdown on offside click
   const checkClick = (event) => {
     if (ref?.current === event.target.offsetParent) {
       setCloseDropdown(true);

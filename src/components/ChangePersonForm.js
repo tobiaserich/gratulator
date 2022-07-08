@@ -3,7 +3,7 @@ import Calendar from "./Calendar";
 import Input from "./Input";
 import CalendarButton from "./CalendarButton";
 import Button from "./Button";
-import { get, set, update, values } from "idb-keyval";
+import { update } from "idb-keyval";
 import DarkenBackground from "./DarkenBackground";
 import { H1, H3 } from "./FormHeadings";
 import FormContainer from "./FormContainer";
@@ -13,12 +13,15 @@ import ButtonBar from "./ButtonBar";
 import FormError from "./FormError";
 import useFormCheck from "../hooks/useFormCheck";
 import { DateContext } from "../context/context";
+import ExitButton from "./ExitButton";
 
 const ChangePersonForm = ({ closeForm, updateBirthdayList, personData }) => {
   const [calendarVisible, setCalendarVisible] = React.useState(false);
   const [checkedName, checkedDate, setCheckValues] = useFormCheck();
   const ref = React.useRef(null);
   const context = React.useContext(DateContext);
+
+  // fill context with person Data
   React.useEffect(() => {
     const date = new Date(personData.birthday);
     context.changeDate("name", personData.name);
@@ -26,13 +29,16 @@ const ChangePersonForm = ({ closeForm, updateBirthdayList, personData }) => {
     context.changeDate("month", date.getMonth() + 1);
     context.changeDate("year", date.getFullYear());
   }, []);
+
+  //close calendarComponent on offside click
   const checkClick = (event) => {
     if (ref.current === event.target.offsetParent && calendarVisible) {
       setCalendarVisible(false);
     }
   };
 
-  const handleSubmit = async (context) => {
+  // submit and validate form data
+  const handleSubmit = async () => {
     const validated = setCheckValues(context);
     if (validated) {
       update("gratulator", (val) => {
@@ -49,29 +55,37 @@ const ChangePersonForm = ({ closeForm, updateBirthdayList, personData }) => {
     updateBirthdayList();
   };
 
-  const handleDelete = async (context) => {
-    const validated = setCheckValues(context);
-    if (validated) {
-      update("gratulator", (val) => {
-        const oldEntries = [...val];
-        oldEntries[personData.indexNo] = false;
-        const filteredEntries = oldEntries.filter((entry) => entry);
-        if (filteredEntries.length === 0) {
-          return;
-        } else {
-          return filteredEntries;
-        }
-      });
+  //delete person from db
+  const handleDelete = async () => {
+    update("gratulator", (val) => {
+      const oldEntries = [...val];
+      oldEntries[personData.indexNo] = false;
+      const filteredEntries = oldEntries.filter((entry) => entry);
+      if (filteredEntries.length === 0) {
+        return;
+      } else {
+        return filteredEntries;
+      }
+    });
 
+    closeForm();
+    updateBirthdayList();
+  };
+
+  //close top component on background click
+  const handleOffsideClick = () => {
+    if (calendarVisible) {
+      setCalendarVisible(false);
+    } else {
       closeForm();
     }
-    updateBirthdayList();
   };
 
   return (
     <>
       <FormContainer onClick={checkClick} ref={ref}>
-        <H1>Add new Person</H1>
+        <ExitButton onClick={closeForm}>X</ExitButton>
+        <H1>Change Person</H1>
         <form>
           <InputWrapper>
             <FormLabel title="full name">
@@ -128,7 +142,7 @@ const ChangePersonForm = ({ closeForm, updateBirthdayList, personData }) => {
           </ButtonBar>
         </form>
       </FormContainer>
-      <DarkenBackground onClick={closeForm}></DarkenBackground>
+      <DarkenBackground onClick={handleOffsideClick}></DarkenBackground>
     </>
   );
 };

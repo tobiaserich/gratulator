@@ -53,11 +53,13 @@ const Item = styled("div")`
 const Dropdown = ({ dropdownItems, menuFor, dropdownActive }) => {
   const [status, setStatus] = React.useState(false);
   const context = React.useContext(DateContext);
+
   React.useEffect(() => {
     if (dropdownActive.closeDropdown === true) {
       setStatus(false);
     }
   }, [dropdownActive]);
+
   const months = [
     "January",
     "February",
@@ -73,6 +75,7 @@ const Dropdown = ({ dropdownItems, menuFor, dropdownActive }) => {
     "December",
   ];
 
+  //handle user interaction with keyboard
   const handleKey = (event) => {
     switch (event.key) {
       case "ArrowDown":
@@ -92,12 +95,13 @@ const Dropdown = ({ dropdownItems, menuFor, dropdownActive }) => {
         break;
     }
   };
-
+  // open/closes dropdown on click
   const handleStatusChange = (e) => {
     e.currentTarget.scroll(0, 0);
     setStatus(!status);
     dropdownActive.setCloseDropdown(false);
   };
+
   return (
     <>
       <DropdownContainer

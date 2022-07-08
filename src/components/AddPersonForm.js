@@ -3,7 +3,7 @@ import Calendar from "./Calendar";
 import Input from "./Input";
 import CalendarButton from "./CalendarButton";
 import Button from "./Button";
-import { DateProvider } from "../context/context";
+import { DateContext } from "../context/context";
 import { get, set, update } from "idb-keyval";
 import DarkenBackground from "./DarkenBackground";
 import { H1, H3 } from "./FormHeadings";
@@ -18,14 +18,17 @@ const AddPersonForm = ({ closeForm, updateBirthdayList }) => {
   const [calendarVisible, setCalendarVisible] = React.useState(false);
   const [checkedName, checkedDate, setCheckValues] = useFormCheck();
   const ref = React.useRef(null);
-
+  const context = React.useContext(DateContext);
+  // check offside click to close calendar
   const checkClick = (event) => {
     if (ref.current === event.target.offsetParent && calendarVisible) {
       setCalendarVisible(false);
     }
   };
 
-  const handleSubmit = async (context) => {
+  // submit and validate form data
+  const handleSubmit = async () => {
+    console.log(context);
     const result = await get("gratulator");
     const validated = setCheckValues(context);
     if (validated) {
@@ -49,10 +52,18 @@ const AddPersonForm = ({ closeForm, updateBirthdayList }) => {
       closeForm();
     }
     updateBirthdayList();
-    // context.changeDate("default");
+  };
+
+  //close top component on background click
+  const handleOffsideClick = () => {
+    if (calendarVisible) {
+      setCalendarVisible(false);
+    } else {
+      closeForm();
+    }
   };
   return (
-    <DateProvider>
+    <>
       <FormContainer onClick={checkClick} ref={ref}>
         <H1>Add new Person</H1>
         <form>
@@ -111,8 +122,8 @@ const AddPersonForm = ({ closeForm, updateBirthdayList }) => {
           </ButtonBar>
         </form>
       </FormContainer>
-      <DarkenBackground onClick={closeForm}></DarkenBackground>
-    </DateProvider>
+      <DarkenBackground onClick={handleOffsideClick}></DarkenBackground>
+    </>
   );
 };
 

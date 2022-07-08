@@ -1,8 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { DateContext } from "../context/context";
-import { get, set, update } from "idb-keyval";
-
 const ButtonComp = styled("div")`
   width: ${({ size }) =>
     size === "big" ? "150px" : size === "small" ? "100px" : ""};
@@ -30,11 +27,9 @@ const ButtonComp = styled("div")`
   }
 `;
 
-const Button = ({ size, children, clickType = null, handleClick }) => {
-  const context = React.useContext(DateContext);
-
+const Button = ({ size, children, handleClick }) => {
   return (
-    <ButtonComp onClick={() => handleClick(context)} size={size}>
+    <ButtonComp onClick={handleClick} size={size}>
       {children}
     </ButtonComp>
   );
