@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 
 const ButtonComp = styled("button")`
+
   width: ${({ size }) =>
     size === "big" ? "150px" : size === "small" ? "100px" : ""};
   height: 35px;

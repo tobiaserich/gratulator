@@ -19,7 +19,7 @@ const AddPersonForm = ({ closeForm, updateBirthdayList }) => {
   const [checkedName, checkedDate, setCheckValues] = useFormCheck();
   const ref = React.useRef(null);
   const context = React.useContext(DateContext);
-
+  
   // check offside click to close calendar
   const checkClick = (event) => {
     if (ref.current === event.target.offsetParent && calendarVisible) {
@@ -28,6 +28,7 @@ const AddPersonForm = ({ closeForm, updateBirthdayList }) => {
   };
 
   // submit and validate form data
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(context);
