@@ -10,7 +10,7 @@ import { get } from "idb-keyval";
 import ChangePersonForm from "../components/ChangePersonForm";
 import { DateProvider } from "../context/context";
 
-const Header = styled("div")`
+const Header = styled("header")`
   display: flex;
   width: 100%;
   background-color: #413a50;
@@ -46,11 +46,11 @@ const Header = styled("div")`
   }
 `;
 
-const Container = styled("div")`
+const Container = styled("main")`
   ${({ isFormActive }) => (isFormActive ? "height:100vh;overflow:hidden;" : "")}
 `;
 
-const Info = styled("div")`
+const Info = styled("article")`
   color: #24202c;
   font-size: 30px;
   font-weight: bold;
@@ -62,7 +62,7 @@ const Main = () => {
   const [headerAnimation, setHeaderAnimation] = React.useState(null);
   const [touchPosition, setTouchPosition] = React.useState(null);
   const [isSticky, setIsSticky] = React.useState(false);
-  const [birthdayList, setBirthdayList] = React.useState();
+  const [birthdayList, setBirthdayList] = React.useState(null);
   const [personData, setPersonData] = React.useState();
   const months = [
     "January",
@@ -211,6 +211,8 @@ const Main = () => {
             <NextBirthday birthdayList={nextBirthday} />
             {IterateTroughMonths()}
           </>
+        ) : birthdayList === null ? (
+          <></>
         ) : (
           <Info>
             It seems you don't have any entries yet.

@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import BurgerMenu from "./BurgerMenu";
 import Button from "./Button";
 
-const Menu = styled("div")`
+const Menu = styled("nav")`
   position: absolute;
   direction: ltr;
   color: black;
@@ -40,14 +40,6 @@ const Menu = styled("div")`
   }
 `;
 
-const ShadowElement = styled("div")`
-  position: absolute;
-  height: 100vh;
-  width: 100%;
-  top: 0;
-  z-index: 50;
-`;
-
 const MainMenu = ({ setFormVisible }) => {
   const [menuActive, setMenuActive] = React.useState(false);
   const [animation, setAnimation] = React.useState("initial");
@@ -70,28 +62,24 @@ const MainMenu = ({ setFormVisible }) => {
 
   return (
     <>
+      <BurgerMenu onClick={handleClick} menuAnimation={animation}></BurgerMenu>
       {menuActive ? (
-        <>
-          <Menu animation={animation}>
-            <Button
-              size="big"
-              clickType="normal"
-              handleClick={() => {
-                setFormVisible("addPerson");
-                handleClick();
-              }}
-            >
-              Add new Person
-            </Button>
-          </Menu>
-          <ShadowElement onClick={handleClick} />
-        </>
+        <Menu animation={animation}>
+          <Button
+            size="big"
+            visualImpairedName="add new Person"
+            clickType="normal"
+            handleClick={(e) => {
+              setFormVisible("addPerson");
+              handleClick();
+            }}
+          >
+            Add new Person
+          </Button>
+        </Menu>
       ) : (
         <></>
       )}
-      <div onClick={handleClick}>
-        <BurgerMenu menuAnimation={animation}></BurgerMenu>
-      </div>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-const Container = styled("div")`
+const Container = styled("article")`
   width: 275px;
   min-height: 150px;
   margin: auto;

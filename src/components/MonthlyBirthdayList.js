@@ -4,7 +4,7 @@ import MonthContainer from "./MonthContainer";
 import SeparationLine from "./SeparationLine";
 import calcAge from "../helper/calcAge";
 
-const Person = styled("div")`
+const Person = styled("span")`
   max-width: 255px;
   width: 100%;
   display: flex;

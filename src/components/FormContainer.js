@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-const FormContainer = styled("div")`
+const FormContainer = styled("section")`
   text-align: center;
   color: white;
   padding: 0;

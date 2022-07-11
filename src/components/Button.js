@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-const ButtonComp = styled("div")`
+
+const ButtonComp = styled("button")`
+
   width: ${({ size }) =>
     size === "big" ? "150px" : size === "small" ? "100px" : ""};
   height: 35px;
@@ -10,6 +12,7 @@ const ButtonComp = styled("div")`
   font-size: 18px;
   align-items: center;
   background: #a2d2ff;
+  border: none;
   border-radius: 23px;
   margin-bottom: 5px;
   user-select: none;
@@ -27,9 +30,13 @@ const ButtonComp = styled("div")`
   }
 `;
 
-const Button = ({ size, children, handleClick }) => {
+const Button = ({ size, children, handleClick, visualImpairedName = "" }) => {
   return (
-    <ButtonComp onClick={handleClick} size={size}>
+    <ButtonComp
+      onClick={handleClick}
+      size={size}
+      aria-label={visualImpairedName}
+    >
       {children}
     </ButtonComp>
   );

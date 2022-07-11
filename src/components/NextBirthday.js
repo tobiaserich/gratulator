@@ -4,7 +4,7 @@ import imgPlaceholder from "../assets/ImgPlaceholder.svg";
 import calcAge from "../helper/calcAge";
 import ArrowButton from "./ArrowButton.js";
 
-const FlexContainer = styled("div")`
+const FlexContainer = styled("article")`
   font-size: 14px;
   height: 70x;
   width: 180px;
@@ -67,6 +67,7 @@ const CounterBubble = styled("div")`
 `;
 
 const NextBirthday = ({ birthdayList }) => {
+  console.log(birthdayList);
   const [showPersonNo, setShowPersonNo] = React.useState(0);
   const handleClick = (dir) => {
     if (dir === "left" && showPersonNo !== 0) {
@@ -82,11 +83,24 @@ const NextBirthday = ({ birthdayList }) => {
         {birthdayList?.length > 1 ? (
           <>
             <CounterBubble>+{birthdayList?.length - 1}</CounterBubble>
-            <ArrowButton direction="left" onClick={() => handleClick("left")} />
-            <ArrowButton
-              direction="right"
-              onClick={() => handleClick("right")}
-            />
+            {showPersonNo === 0 ? (
+              <></>
+            ) : (
+              <ArrowButton
+                direction="left"
+                onClick={() => handleClick("left")}
+                aria-label="previous"
+              />
+            )}
+            {showPersonNo === birthdayList.length - 1 ? (
+              <></>
+            ) : (
+              <ArrowButton
+                direction="right"
+                onClick={() => handleClick("right")}
+                aria-label="next"
+              />
+            )}
           </>
         ) : (
           ""
