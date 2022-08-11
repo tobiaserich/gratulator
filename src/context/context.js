@@ -6,7 +6,7 @@ const DateProvider = (props) => {
   const [inputDay, setInputDay] = React.useState(new Date().getDate());
   const [inputMonth, setInputMonth] = React.useState(new Date().getMonth() + 1);
   const [inputYear, setInputYear] = React.useState(new Date().getFullYear());
-  const [inputName, setInputName] = React.useState("Tobias Erich");
+  const [inputName, setInputName] = React.useState("");
   const changeDate = (part, value) => {
     switch (part) {
       case "default":
