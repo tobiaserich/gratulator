@@ -1,3 +1,45 @@
+# Gratulator </br> Your friendly birthay reminder.
+
+## Why
+
+I always struggle with remembering birthdays of family and friends, so i decided to develop an app to help me.
+
+Now, i can proudly present: The Gratulator.
+
+## How to use
+
+- Click on the burger menu and the "add person" button to open the pop up menu.  
+<br/>
+<img src="https://i.gyazo.com/d034b992dd392962adf3876b5f702fe8.png" alt="drawing"     style="display: block; margin-left: auto; margin-right: auto; width: 200px;"/>
+<br/>
+
+  <br/>
+  <img src="https://i.gyazo.com/e8bab01910bf937b5ca06e4fe43609d7.png" alt="drawing"     style="display: block; margin-left: auto; margin-right: auto; width: 200px;"/>
+  <br/>
+
+- You can enter the birthday either via the form or the integrated calendar  
+  <br/>
+  <img src="https://i.gyazo.com/2c631a2ff53d71fc7f47085efc496c99.png" alt="drawing"     style="display: block; margin-left: auto; margin-right: auto; width: 200px;"/>
+  <br/>
+
+  - After submitting the form, the person will appear in your calendar  
+     <br/>
+    <img src="https://i.gyazo.com/968bbd8847e570ccc9282e70e03347f4.png" alt="drawing"     style="display: block; margin-left: auto; margin-right: auto; width: 200px;"/>
+    <br/>
+
+- You can also edit or delete a person by clicking on their entry  
+  <br/>
+  <img src="https://i.gyazo.com/d7987141bedacaf0fc203a12c44bed98.png" alt="drawing"     style="display: block; margin-left: auto; margin-right: auto; width: 200px;"/>
+  <br/>
+
+# Missing Feature
+
+- Push notification
+
+---
+
+</br>
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
