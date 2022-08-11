@@ -28,6 +28,7 @@ const AddPersonForm = ({ closeForm, updateBirthdayList }) => {
   };
 
   // submit and validate form data
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(context);
